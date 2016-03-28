@@ -15,7 +15,7 @@ public class ConfigLoader {
 
     File dir;
 
-    HashMap<String, OreConfig> configFiles = new HashMap<>();
+    public HashMap<String, OreConfig> configFiles = new HashMap<>();
 
     public ConfigLoader(File dir) {
         this.dir = dir;
@@ -48,7 +48,7 @@ public class ConfigLoader {
         File output = new File(dir, "example.json");
         if(!output.exists()){
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            OreConfig config = new OreConfig("blockname", 0, 7, 3, 5, 64);
+            OreConfig config = new OreConfig("blockname", 0, 7, 3, 5, 64, 1);
             String json = gson.toJson(config);
             try {
                 FileWriter writer = new FileWriter(output);

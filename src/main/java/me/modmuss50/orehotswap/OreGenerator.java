@@ -22,11 +22,11 @@ import java.util.*;
 /**
  * Created by mark on 28/03/16.
  */
-public class OreGenerator{
+public class OreGenerator {
 
     private static final Set<ChunkCoord> completedChunks = Sets.newHashSet();
-    private final Deque<ChunkCoord> chunksToRetroGen = new ArrayDeque<ChunkCoord>(64);
-    private final HashMap<ChunkCoord, OreConfig> oreTypeHasMap = new HashMap<>();
+    public final Deque<ChunkCoord> chunksToRetroGen = new ArrayDeque<ChunkCoord>(64);
+    public final HashMap<ChunkCoord, OreConfig> oreTypeHasMap = new HashMap<>();
 
     public void markChunk(ChunkCoord coord)
     {

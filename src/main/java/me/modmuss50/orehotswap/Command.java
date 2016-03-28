@@ -1,6 +1,7 @@
 package me.modmuss50.orehotswap;
 
 import cpw.mods.fml.common.registry.GameData;
+import me.modmuss50.orehotswap.config.ConfigLoader;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -44,6 +45,18 @@ public class Command implements ICommand {
                 }
             } else {
                 ((EntityPlayer) sender).addChatComponentMessage(new ChatComponentText("hold an item!"));
+            }
+        } else if(args[0].equals("gen")){
+            if(args.length > 1){
+                if(OreHotSwap.loader.configFiles.containsKey(args[1])){
+                    sender.addChatMessage(new ChatComponentText("Generating ore in the world..."));
+                    //TODO things
+                    OreHotSwap.oreGenerator.
+                } else {
+                    sender.addChatMessage(new ChatComponentText("I could not find that file!"));
+                }
+            } else {
+                sender.addChatMessage(new ChatComponentText("Please provide a file to generate"));
             }
         }
     }
