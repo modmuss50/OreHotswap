@@ -8,64 +8,52 @@ import reborncore.common.misc.Location;
 /**
  * Created by mark on 28/03/16.
  */
-public class ChunkCoord implements Comparable<ChunkCoord>
-{
+public class ChunkCoord implements Comparable<ChunkCoord> {
     private final ImmutablePair<Integer, Integer> data;
 
-    private ChunkCoord(int x, int z)
-    {
+    private ChunkCoord(int x, int z) {
         data = ImmutablePair.of(x, z);
     }
 
-    private ChunkCoord(ChunkEvent event)
-    {
+    private ChunkCoord(ChunkEvent event) {
         this(event.getChunk().xPosition, event.getChunk().zPosition);
     }
 
-    public static ChunkCoord of(int x, int z)
-    {
+    public static ChunkCoord of(int x, int z) {
         return new ChunkCoord(x, z);
     }
 
-    public static ChunkCoord of(Location coord)
-    {
+    public static ChunkCoord of(Location coord) {
         return new ChunkCoord(coord.getX() >> 4, coord.getZ() >> 4);
     }
 
-    public static ChunkCoord of(ChunkEvent event)
-    {
+    public static ChunkCoord of(ChunkEvent event) {
         return new ChunkCoord(event);
     }
 
-    public boolean containsWorldCoord(Location coord)
-    {
+    public boolean containsWorldCoord(Location coord) {
         return equals(of(coord));
     }
 
-    public int getX()
-    {
+    public int getX() {
         return data.left;
     }
 
-    public int getZ()
-    {
+    public int getZ() {
         return data.right;
     }
 
-    public Location localToWorldCoords(Location coord)
-    {
+    public Location localToWorldCoords(Location coord) {
         return new Location((data.left << 4) + coord.getX(), coord.getY(), (data.right << 4) + coord.getZ());
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hashCode(data.left, data.right);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -76,14 +64,12 @@ public class ChunkCoord implements Comparable<ChunkCoord>
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return Objects.toStringHelper(this).add("X", data.left).add("Z", data.right).toString();
     }
 
     @Override
-    public int compareTo(ChunkCoord o)
-    {
+    public int compareTo(ChunkCoord o) {
         return data.left.equals(o.data.left) ? data.right.compareTo(o.data.right) : data.left.compareTo(o.data.left);
     }
 }

@@ -1,5 +1,6 @@
 package me.modmuss50.orehotswap;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -36,10 +37,11 @@ public class OreHotSwap implements IModInfo {
     public void init(FMLInitializationEvent event) {
         oreGenerator = new OreGenerator();
         MinecraftForge.EVENT_BUS.register(oreGenerator);
+        FMLCommonHandler.instance().bus().register(oreGenerator);
     }
 
     @Mod.EventHandler
-    public void serverStarting(FMLServerStartingEvent event){
+    public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new Command());
     }
 

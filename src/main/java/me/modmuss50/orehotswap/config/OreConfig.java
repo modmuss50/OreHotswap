@@ -7,6 +7,8 @@ public class OreConfig {
 
     public String blockName;
 
+    public String blockToReplace = "minecraft:stone";
+
     public int meta;
 
     public int veinSize;
@@ -19,8 +21,9 @@ public class OreConfig {
 
     public int world;
 
-    public OreConfig(String blockName, int meta, int veinSize, int veinsPerChunk, int minYHeight, int maxYHeight, int world) {
+    public OreConfig(String blockName, String blockToReplace, int meta, int veinSize, int veinsPerChunk, int minYHeight, int maxYHeight, int world) {
         this.blockName = blockName;
+        this.blockToReplace = blockToReplace;
         this.meta = meta;
         this.veinSize = veinSize;
         this.veinsPerChunk = veinsPerChunk;

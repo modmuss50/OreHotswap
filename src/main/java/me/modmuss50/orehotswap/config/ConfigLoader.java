@@ -46,9 +46,9 @@ public class ConfigLoader {
 
     private void createExampleJsonFile() {
         File output = new File(dir, "example.json");
-        if(!output.exists()){
+        if (!output.exists()) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            OreConfig config = new OreConfig("blockname", 0, 7, 3, 5, 64, 1);
+            OreConfig config = new OreConfig("minecraft:diamond_block", "minecraft:stone", 0, 7, 3, 5, 64, 1);
             String json = gson.toJson(config);
             try {
                 FileWriter writer = new FileWriter(output);
