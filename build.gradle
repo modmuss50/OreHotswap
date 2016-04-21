@@ -56,7 +56,6 @@ def grabDep(name, url) {
 }
 
 dependencies {
-    compile 'RebornCore:RebornCore:1.1.0.+:dev'
 }
 
 processResources

@@ -3,7 +3,6 @@ package me.modmuss50.orehotswap.lib;
 import com.google.common.base.Objects;
 import net.minecraftforge.event.world.ChunkEvent;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import reborncore.common.misc.Location;
 
 /**
  * Created by mark on 28/03/16.
