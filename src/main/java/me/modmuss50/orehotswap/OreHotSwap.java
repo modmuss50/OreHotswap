@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 @Mod(modid = "orehotswap", name = "OreHotSwap", version = "1")
-public class OreHotSwap implements IModInfo {
+public class OreHotSwap {
 
     public static ConfigLoader loader;
     public static LogHelper logHelper;
@@ -22,7 +22,27 @@ public class OreHotSwap implements IModInfo {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        logHelper = new LogHelper(this);
+        logHelper = new LogHelper(new IModInfo() {
+            @Override
+            public String MOD_NAME() {
+                return "OreHotSwap";
+            }
+
+            @Override
+            public String MOD_ID() {
+                return "orehotswap";
+            }
+
+            @Override
+            public String MOD_VERSION() {
+                return "1";
+            }
+
+            @Override
+            public String MOD_DEPENDENCUIES() {
+                return null;
+            }
+        });
         this.loader = new ConfigLoader(new File(event.getModConfigurationDirectory(), "orehotswap"));
         try {
             loader.load();
@@ -43,26 +63,5 @@ public class OreHotSwap implements IModInfo {
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new Command());
-    }
-
-
-    @Override
-    public String MOD_NAME() {
-        return "OreHotSwap";
-    }
-
-    @Override
-    public String MOD_ID() {
-        return "orehotswap";
-    }
-
-    @Override
-    public String MOD_VERSION() {
-        return "1";
-    }
-
-    @Override
-    public String MOD_DEPENDENCUIES() {
-        return "";
     }
 }
