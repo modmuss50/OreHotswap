@@ -80,8 +80,6 @@ public class CommandHS extends CommandBase {
 				}
 				int chunkPosX = xPos >> 4;
 				int chunkPosZ = zPos >> 4;
-				System.out.println(chunkPosX + ":" + chunkPosZ);
-				System.out.println(OreHotSwap.loader.configFiles);
 				if (OreHotSwap.loader.configFiles.containsKey(configName)) {
 					for (int x = -radius; x < radius; x++) {
 						for (int z = -radius; z < radius; z++) {
