@@ -1,5 +1,7 @@
 package me.modmuss50.orehotswap.config;
 
+import net.minecraft.util.ResourceLocation;
+
 /**
  * Created by mark on 28/03/16.
  */
@@ -34,4 +36,13 @@ public class OreConfig {
 
     public OreConfig() {
     }
+
+
+    public ResourceLocation getBlock(){
+    	return new ResourceLocation(blockName);
+    }
+
+	public ResourceLocation getReplacementBlock(){
+		return new ResourceLocation(blockToReplace);
+	}
 }

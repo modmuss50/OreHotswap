@@ -1,6 +1,7 @@
 package me.modmuss50.orehotswap.lib;
 
 import com.google.common.base.Objects;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.world.ChunkEvent;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -22,7 +23,7 @@ public class ChunkCoord implements Comparable<ChunkCoord> {
         return new ChunkCoord(x, z);
     }
 
-    public static ChunkCoord of(Location coord) {
+    public static ChunkCoord of(BlockPos coord) {
         return new ChunkCoord(coord.getX() >> 4, coord.getZ() >> 4);
     }
 
@@ -30,7 +31,7 @@ public class ChunkCoord implements Comparable<ChunkCoord> {
         return new ChunkCoord(event);
     }
 
-    public boolean containsWorldCoord(Location coord) {
+    public boolean containsWorldCoord(BlockPos coord) {
         return equals(of(coord));
     }
 
@@ -42,8 +43,8 @@ public class ChunkCoord implements Comparable<ChunkCoord> {
         return data.right;
     }
 
-    public Location localToWorldCoords(Location coord) {
-        return new Location((data.left << 4) + coord.getX(), coord.getY(), (data.right << 4) + coord.getZ());
+    public BlockPos localToWorldCoords(BlockPos coord) {
+        return new BlockPos((data.left << 4) + coord.getX(), coord.getY(), (data.right << 4) + coord.getZ());
     }
 
     @Override

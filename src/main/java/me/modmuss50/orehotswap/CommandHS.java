@@ -1,52 +1,58 @@
 package me.modmuss50.orehotswap;
 
-import cpw.mods.fml.common.registry.GameData;
+
 import me.modmuss50.orehotswap.lib.ChunkCoord;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.NumberInvalidException;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by mark on 28/03/16.
  */
-public class Command extends CommandBase {
+public class CommandHS extends CommandBase {
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "orehs";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return null;
     }
 
     @Override
-    public List getCommandAliases() {
-        return null;
+    public List getAliases() {
+        return Collections.emptyList();
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws PlayerNotFoundException, NumberInvalidException {
         if (args.length == 0) {
-            sender.addChatMessage(new ChatComponentText("Use some args!"));
+            sender.sendMessage(new TextComponentString("Use some args!"));
         } else if (args[0].equals("getname")) {
             EntityPlayer player = (EntityPlayer) sender;
-            if (player.getHeldItem() != null) {
-                Block block = Block.getBlockFromItem(player.getHeldItem().getItem());
-                if (block != null && block != Blocks.air) {
-                    sender.addChatMessage(new ChatComponentText(GameData.getBlockRegistry().getNameForObject(block) + " with a meta of " + player.getHeldItem().getItemDamage()));
+            if (player.getHeldItem(EnumHand.MAIN_HAND) != null) {
+                Block block = Block.getBlockFromItem(player.getHeldItem(EnumHand.MAIN_HAND).getItem());
+                if (block != null && block != Blocks.AIR) {
+                    sender.sendMessage(new TextComponentString(GameData.getBlockRegistry().getNameForObject(block) + " with a meta of " + player.getHeldItem(EnumHand.MAIN_HAND).getItemDamage()));
                 } else {
-                    ((EntityPlayer) sender).addChatComponentMessage(new ChatComponentText("hold a Block!"));
+                    ((EntityPlayer) sender).sendMessage(new TextComponentString("hold a Block!"));
                 }
             } else {
-                ((EntityPlayer) sender).addChatComponentMessage(new ChatComponentText("hold an item!"));
+                ((EntityPlayer) sender).sendMessage(new TextComponentString("hold an item!"));
             }
         } else if (args[0].equals("gen")) {
             if (args.length == 5) {
@@ -60,23 +66,24 @@ public class Command extends CommandBase {
                 if (sxPos.equals("~")) {
                     xPos = (int) playerMP.posX;
                 } else {
-                    xPos = parseInt(sender, sxPos);
+                    xPos = parseInt(sxPos);
                 }
 
                 int zPos;
                 if (szPos.equals("~")) {
                     zPos = (int) playerMP.posZ;
                 } else {
-                    zPos = parseInt(sender, sxPos);
+                    zPos = parseInt(sxPos);
                 }
-                int radius = parseInt(sender, sRadius);
+                int radius = parseInt(sRadius);
                 if (radius < 1) {
-                    sender.addChatMessage(new ChatComponentText("The radius must be bigger than 0!"));
+                    sender.sendMessage(new TextComponentString("The radius must be bigger than 0!"));
                 }
                 int chunkPosX = xPos >> 4;
                 int chunkPosZ = zPos >> 4;
                 System.out.println(chunkPosX + ":" + chunkPosZ);
-                if (OreHotSwap.loader.configFiles.containsKey(configName)) {
+	            System.out.println(OreHotSwap.loader.configFiles);
+	            if (OreHotSwap.loader.configFiles.containsKey(configName)) {
                     for (int x = -radius; x < radius; x++) {
                         for (int z = -radius; z < radius; z++) {
                             ChunkCoord coord = ChunkCoord.of(x + chunkPosX, z + chunkPosZ);
@@ -84,40 +91,21 @@ public class Command extends CommandBase {
                         }
                     }
                 } else {
-                    sender.addChatMessage(new ChatComponentText("I could not find that file!"));
+                    sender.sendMessage(new TextComponentString("I could not find that file!"));
                 }
             } else {
-                sender.addChatMessage(new ChatComponentText("Please provide  the correct arguments:"));
-                sender.addChatMessage(new ChatComponentText("/orehs gen <configName> <centerx> <centerz> <chunkradius>"));
+                sender.sendMessage(new TextComponentString("Please provide  the correct arguments:"));
+                sender.sendMessage(new TextComponentString("/orehs gen <configName> <centerx> <centerz> <chunkradius>"));
             }
         } else if (args[0].equals("reload")) {
             try {
                 OreHotSwap.loader.load();
-                sender.addChatMessage(new ChatComponentText("Config reloaded!"));
+                sender.sendMessage(new TextComponentString("Config reloaded!"));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                sender.addChatMessage(new ChatComponentText(e.getLocalizedMessage()));
+                sender.sendMessage(new TextComponentString(e.getLocalizedMessage()));
             }
         }
     }
 
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
-    }
-
-    @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args) {
-        return null;
-    }
-
-    @Override
-    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
-        return false;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
 }

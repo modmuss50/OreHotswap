@@ -30,7 +30,7 @@ public class ConfigLoader {
             configFiles.clear();
         }
         for (File file : dir.listFiles()) {
-            if (file.getName().endsWith(".json") && !file.getName().equals("example.json")) {
+            if (file.getName().endsWith(".json")) {
                 loadFile(file);
             }
         }

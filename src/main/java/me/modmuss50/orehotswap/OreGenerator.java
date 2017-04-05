@@ -2,17 +2,19 @@ package me.modmuss50.orehotswap;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.relauncher.Side;
 import me.modmuss50.orehotswap.config.OreConfig;
 import me.modmuss50.orehotswap.lib.ChunkCoord;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,9 +44,9 @@ public class OreGenerator {
         if (isTickEligibleForRetroGen(event)) {
             if (!chunksToRetroGen.isEmpty()) {
                 ChunkCoord coord = chunksToRetroGen.get(0);
-                OreHotSwap.logHelper.debug("Regenerating ore in " + coord + '.' + event.world.provider.dimensionId);
+                OreHotSwap.logHelper.debug("Regenerating ore in " + coord + '.' + event.world.provider.getDimension());
                 final World world = event.world;
-                if (world.provider.dimensionId == oreTypeHashMap.get(coord).world) {
+                if (world.provider.getDimension() == oreTypeHashMap.get(coord).world) {
                     final long seed = world.getSeed();
                     final Random rng = new Random(seed);
                     final long xSeed = rng.nextLong() >> 2 + 1L;
@@ -86,19 +88,18 @@ public class OreGenerator {
     }
 
     public void generate(Random random, int chunkX, int chunkZ, World world, OreConfig config) {
-        Block block = GameData.getBlockRegistry().getObject(config.blockName);
-        Block block2 = GameData.getBlockRegistry().getObject(config.blockToReplace);
-        System.out.println(block2);
+        Block block = GameData.getBlockRegistry().getObject(config.getBlock());
+        Block block2 = GameData.getBlockRegistry().getObject(config.getReplacementBlock());
         if(block2 == null){
-            block2 = Blocks.stone;
+            block2 = Blocks.STONE;
         }
-        WorldGenMinable worldGenMinable = new WorldGenMinable(block, config.meta, config.veinSize, block2);
+        WorldGenMinable worldGenMinable = new WorldGenMinable(block.getDefaultState(), config.veinSize, BlockMatcher.forBlock(block2));
         int xPos, yPos, zPos;
         for (int i = 0; i < config.veinsPerChunk; i++) {
             xPos = chunkX * 16 + random.nextInt(16);
             yPos = 10 + random.nextInt(config.maxYHeight - config.minYHeight);
             zPos = chunkZ * 16 + random.nextInt(16);
-            worldGenMinable.generate(world, random, xPos, yPos, zPos);
+            worldGenMinable.generate(world, random, new BlockPos(xPos, yPos, zPos));
         }
     }
 }
